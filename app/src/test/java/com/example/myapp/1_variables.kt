@@ -39,6 +39,9 @@ class Variables {
 
     var nullableTextVariable: String? = null
 
+    var list: List<Int> = listOf(12, 23, 54)
+    var mutableList: MutableList<Int> = mutableListOf(487, 34, 34)
+
     /**
      * Changer la ce qu'on met dans la boîte s'appelle assigner. La syntaxe est :
      * <nomDeLaVariable> = <nouvelleValeur>
@@ -47,5 +50,7 @@ class Variables {
     fun example() {
         integerVariable = 16
         nullableTextVariable = "un nouveau texte"
+        list.get(1)
+        mutableList.add(23)
     }
 }

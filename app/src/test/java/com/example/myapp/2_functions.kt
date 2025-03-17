@@ -23,7 +23,7 @@ class Functions {
     fun soustraction(nombre1: Int, nombre2: Int): Int = nombre1 - nombre2
 
     fun multiplication(number1: Int, number2: Int): Int {
-        return 12
+        return number1 * number2
     }
 
     /**
