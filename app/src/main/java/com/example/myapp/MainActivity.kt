@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -58,7 +60,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             App(ecranModel, ::onNumberChange, ::onvalidate)
         }
@@ -135,7 +136,7 @@ fun Ecran(
     modifier: Modifier = Modifier
 ) {
     Box(modifier) {
-        Column(modifier) {
+        Column(Modifier.fillMaxSize()) {
             Bulles(ecranModel)
             ChampTexte(ecranModel, ecranModel.nombre, onNumberChange, onvalidate)
         }
@@ -150,7 +151,8 @@ private fun ColumnScope.Bulles(ecranModel: EcranModel) {
             .fillMaxWidth()
             .weight(1f),
         reverseLayout = true,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(all = 16.dp)
     ) {
         items(ecranModel.bulles.reversed()) { bulle: Bulle ->
             Bulle(bulle)
@@ -183,7 +185,7 @@ private fun ChampTexte(
     onNumberChange: (Int?) -> Unit,
     onvalidate: () -> Unit
 ) {
-    Row(modifier = Modifier.padding(16.dp)) {
+    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         TextField(
             value = if (ecranModel.nombre == null) "" else nombre.toString(),
             onValueChange = { newText ->
@@ -201,8 +203,7 @@ private fun ChampTexte(
         )
 
         Button(
-            onClick = { onvalidate() },
-            modifier = Modifier.padding(top = 16.dp)
+            onClick = { onvalidate() }
         ) {
             Text("Valider")
         }
