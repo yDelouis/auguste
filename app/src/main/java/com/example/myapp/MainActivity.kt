@@ -8,7 +8,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +35,12 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.Lottie
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieAnimatable
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.myapp.ui.theme.MyAppTheme
 import kotlin.random.Random
 
@@ -69,7 +77,8 @@ class MainActivity : ComponentActivity() {
             bulles = ecranModel.bulles
                     + Bulle(text = ecranModel.nombre.toString(), Position.Droite)
                     + Bulle(text = reponse, Position.Gauche),
-            nombre = null
+            nombre = null,
+            lottie= nombre==randomNumber
         )
         ecranModel = newEcranModel
 
@@ -78,7 +87,8 @@ class MainActivity : ComponentActivity() {
 
 data class EcranModel(
     val bulles: List<Bulle>,
-    val nombre: Int?
+    val nombre: Int?,
+    var lottie: Boolean = false
 )
 
 data class Bulle(
@@ -117,56 +127,88 @@ fun Ecran(
     onvalidate: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
-        LazyColumn(
+    Box(modifier) {
+        Column(modifier) {
+            Bulles(ecranModel)
+            ChampTexte(ecranModel, ecranModel.nombre, onNumberChange, onvalidate)
+        }
+        Confetti(ecranModel.lottie)
+    }
+}
+
+@Composable
+private fun ColumnScope.Bulles(ecranModel: EcranModel) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f),
+        reverseLayout = true,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(ecranModel.bulles.reversed()) { bulle: Bulle ->
+            Bulle(bulle)
+        }
+    }
+}
+
+@Composable
+private fun Bulle(bulle: Bulle) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = if (bulle.position == Position.Gauche) Arrangement.Start else Arrangement.End
+    ) {
+        Text(
+            bulle.text,
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            reverseLayout = true,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .background(
+                    color = Color.Gray,
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+}
+
+@Composable
+private fun ChampTexte(
+    ecranModel: EcranModel,
+    nombre: Int?,
+    onNumberChange: (Int?) -> Unit,
+    onvalidate: () -> Unit
+) {
+    Row(modifier = Modifier.padding(16.dp)) {
+        TextField(
+            value = if (ecranModel.nombre == null) "" else nombre.toString(),
+            onValueChange = { newText ->
+                var newnumber = newText.toIntOrNull()
+                if (newnumber != null) onNumberChange(newnumber)
+                else if (newText.isBlank()) onNumberChange(null)
+            },
+            label = { Text("Entrez un nombre") },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number
+            ),
+            singleLine = true,
+            keyboardActions = KeyboardActions(onDone = { onvalidate() }),
+            modifier = Modifier.weight(1f)
+        )
+
+        Button(
+            onClick = { onvalidate() },
+            modifier = Modifier.padding(top = 16.dp)
         ) {
-            items(ecranModel.bulles.reversed()) { bulle: Bulle ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = if (bulle.position == Position.Gauche) Arrangement.Start else Arrangement.End
-                ) {
-                    Text(
-                        bulle.text,
-                        modifier = Modifier
-                            .background(
-                                color = Color.Gray,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    )
-                }
-
-            }
+            Text("Valider")
         }
-        Row(modifier = Modifier.padding(16.dp)) {
-            TextField(
-                value = if (ecranModel.nombre == null) "" else ecranModel.nombre.toString(),
-                onValueChange = { newText ->
-                    var newnumber = newText.toIntOrNull()
-                    if (newnumber!=null) onNumberChange(newnumber)
-                    else if (newText.isBlank()) onNumberChange(null)
-                },
-                label = { Text("Entrez un nombre") },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number
-                ),
-                singleLine = true,
-                keyboardActions = KeyboardActions(onDone = { onvalidate() }),
-                modifier = Modifier.weight(1f)
-            )
+    }
+}
 
-            Button(
-                onClick = { onvalidate() },
-                modifier = Modifier.padding(top = 16.dp)
-            ) {
-                Text("Valider")
-            }
-        }
+@Composable
+fun Confetti(afficher: Boolean) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.confetti))
+    if (afficher) {
+        LottieAnimation(
+            composition = composition
+        )
     }
 }
 
