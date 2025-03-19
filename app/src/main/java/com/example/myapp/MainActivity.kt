@@ -6,6 +6,7 @@ import android.text.style.BulletSpan
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.collection.emptyLongSet
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
         )
     )
 
-    var randomNumber = Random.nextInt(0, 10001) // La borne supérieure (10001) est exclusive
+    var randomNumber = calculLeNouveauNombre()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +62,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             App(ecranModel, ::onNumberChange, ::onvalidate)
         }
+    }
+
+    fun calculLeNouveauNombre():Int {
+        return  Random.nextInt(0, 10001) // La borne supérieure (10001) est exclusive
     }
 
     fun onNumberChange(number: Int?) {
@@ -72,7 +77,7 @@ class MainActivity : ComponentActivity() {
         var nombre = ecranModel.nombre ?: return
         var reponse = if (nombre > randomNumber) "C'est moins"
                     else if (nombre < randomNumber) "C'est plus"
-                    else "Bien joué!"
+                    else "Bien joué! Trouve le nouveau nombre."
         var newEcranModel = ecranModel.copy(
             bulles = ecranModel.bulles
                     + Bulle(text = ecranModel.nombre.toString(), Position.Droite)
@@ -81,7 +86,9 @@ class MainActivity : ComponentActivity() {
             lottie= nombre==randomNumber
         )
         ecranModel = newEcranModel
-
+        if (randomNumber==nombre){
+            randomNumber=calculLeNouveauNombre()
+        }
     }
 }
 
