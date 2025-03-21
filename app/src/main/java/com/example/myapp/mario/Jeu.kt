@@ -33,19 +33,36 @@ class Jeu {
             Obstacle(left = 620, bottom = 750, width = 20, height = 30),
             Obstacle(left = 500, bottom = 850, width = 40, height = 30),
             Obstacle(left = 300, bottom = 950, width = 100, height = 30),
-            Obstacle(left = 490, bottom = 1050, width = 100, height = 30),
-            Obstacle(left = 590, bottom = 1150, width = 100, height = 30),
+            Obstacle(left = 490, bottom = 1100, width = 100, height = 30),
+            Obstacle(left = 590, bottom = 1230, width = 100, height = 30),
+            Obstacle(left = 690, bottom = 1340, width = 100 , height = 30),
+            Obstacle(left = 550, bottom = 1400, width = 70, height = 30),
+            Obstacle(left = 450, bottom = 1470, width = 10, height = 30),
+            Obstacle(left = 250, bottom = 1520, width = 5, height = 30),
+
 
             //Partie a gauche
             Obstacle(left = 100, bottom = 200, width = 20, height = 30),
             Obstacle(left = 250, bottom = 300, width = 20, height = 30),
             Obstacle(left = 100, bottom = 400, width = 20, height = 30),
             Obstacle(left = 250, bottom = 500, width = 20, height = 30),
-
             Obstacle(left = 100, bottom = 600, width = 20, height = 30),
             Obstacle(left = 250, bottom = 700, width = 20, height = 30),
             Obstacle(left = 100, bottom = 800, width = 20, height = 30),
-            Obstacle(left = 210, bottom = 900, width = 20, height = 30),
+            Obstacle(left = 250, bottom = 900, width = 20, height = 30),
+            Obstacle(left = 100, bottom = 1000, width = 20, height = 30),
+            Obstacle(left = 250, bottom = 1100, width = 20, height = 30),
+            Obstacle(left = 100, bottom = 1200, width = 20, height = 30),
+            Obstacle(left = 250, bottom = 1300, width = 20, height = 30),
+            Obstacle(left = 100, bottom = 1400, width = 20, height = 30),
+            Obstacle(left = 100, bottom = 1620, width = 10, height = 7),
+            Obstacle(left = 250, bottom = 1750, width = 5, height = 5),
+            Obstacle(left = 100, bottom = 1850, width = 5, height = 5),
+
+
+
+            //haut
+            Obstacle(left = 300 , bottom = 1900 , width = 1000 , height = 30),
 
             )
     )
