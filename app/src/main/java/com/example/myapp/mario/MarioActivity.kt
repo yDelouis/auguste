@@ -34,12 +34,10 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
-import com.example.myapp.R
 import com.example.myapp.ui.theme.MyAppTheme
+import fr.ydelouis.auguste.R
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.time.Duration
 
 class MarioActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

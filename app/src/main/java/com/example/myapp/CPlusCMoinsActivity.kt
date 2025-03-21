@@ -36,6 +36,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.myapp.ui.theme.MyAppTheme
+import fr.ydelouis.auguste.R
 import kotlin.random.Random
 
 class CPlusCMoinsActivity : ComponentActivity() {
