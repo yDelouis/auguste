@@ -89,11 +89,7 @@ class Jeu {
         if (marioTouche(newMario, monde.obstacles)) {
             newMario = newMario.copy(vy = 0f, bottom = mario.bottom)
         }
-        if (newMario.bottom > 0) { // Si mario est en l'air
-            newMario = newMario.copy(vy = newMario.vy - GRAVITY)
-        } else { // sinon, mario est au sol
-            newMario = newMario.copy(vy = 0f)
-        }
+        newMario = newMario.copy(vy = newMario.vy - GRAVITY)
         return newMario
     }
 
