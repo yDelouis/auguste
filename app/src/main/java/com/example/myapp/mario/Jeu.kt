@@ -19,6 +19,8 @@ class Jeu {
     data class Monde(
         val mario: Mario = Mario(),
         val obstacles: List<Obstacle> = listOf(
+            Obstacle(left = 0, bottom = -10, width = 100000, height = 10), // sol
+
             Obstacle(left = 200, bottom = 0, width = 50, height = 110),
             Obstacle(left = 350, bottom = 70, width = 100, height = 30),
             Obstacle(left = 500, bottom = 130, width = 100, height = 30),
@@ -85,7 +87,7 @@ class Jeu {
 
     private fun moveVertical(mario: Mario): Mario {
         var newMario = mario
-        newMario = newMario.copy(bottom = (newMario.bottom + newMario.vy).roundToInt().coerceAtLeast(0))
+        newMario = newMario.copy(bottom = (newMario.bottom + newMario.vy).roundToInt())
         if (marioTouche(newMario, monde.obstacles)) {
             newMario = newMario.copy(vy = 0f, bottom = mario.bottom)
         }
@@ -125,7 +127,7 @@ class Jeu {
     fun onJumpPressed() {
         var mario = monde.mario
         mario = mario.copy(bottom = mario.bottom - 1) // hack pour detecter qu'on est sur un obstacle
-        if(marioTouche(mario, monde.obstacles) || mario.bottom <= 0) {
+        if(marioTouche(mario, monde.obstacles)) {
             monde = monde.copy(mario = monde.mario.copy(vy = VITESSE_SAUT))
         }
     }
