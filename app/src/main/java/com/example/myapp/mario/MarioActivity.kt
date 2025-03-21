@@ -49,7 +49,7 @@ class MarioActivity : ComponentActivity() {
 @Composable
 fun Interface(jeu: Jeu, modifier: Modifier = Modifier) {
     Column(modifier) {
-        Monde(jeu.monde, modifier.fillMaxWidth().weight(1f))
+        Monde(jeu.monde, Modifier.fillMaxWidth().weight(1f))
         BarreDesBoutons(jeu)
     }
 

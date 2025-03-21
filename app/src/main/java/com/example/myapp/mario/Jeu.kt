@@ -127,7 +127,11 @@ class Jeu {
     }
 
     fun onJumpPressed() {
-        monde = monde.copy(mario = monde.mario.copy(vy = VITESSE_SAUT))
+        var mario = monde.mario
+        mario = mario.copy(bottom = mario.bottom - 1) // hack pour detecter qu'on est sur un obstacle
+        if(marioTouche(mario, monde.obstacles) || mario.bottom <= 0) {
+            monde = monde.copy(mario = monde.mario.copy(vy = VITESSE_SAUT))
+        }
     }
 
     fun onJumpReleased() {
