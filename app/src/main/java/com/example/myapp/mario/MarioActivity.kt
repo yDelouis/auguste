@@ -9,9 +9,11 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.example.myapp.ui.theme.MyAppTheme
 import kotlinx.coroutines.Dispatchers
@@ -54,9 +57,11 @@ fun Interface(jeu: Jeu, modifier: Modifier = Modifier) {
 
 @Composable
 fun BarreDesBoutons(jeu: Jeu, modifier: Modifier = Modifier) {
-    Row(modifier) {
+    Row(modifier.background(color = Color.Black).padding(16.dp)) {
         Bouton("<", jeu::onLeftPressed, jeu::onLeftReleased)
+        Spacer(Modifier.width(16.dp))
         Bouton(">", jeu::onRightPressed, jeu::onRightReleased)
+        Spacer(Modifier.weight(1f))
         Bouton("^", jeu::onJumpPressed, jeu::onJumpReleased)
     }
 }
@@ -75,13 +80,13 @@ private fun Bouton(text: String, onPressed: () -> Unit, onReleased: () -> Unit) 
         }
     }
     Button(onClick = { }, interactionSource = interactionSource) {
-        Text(text)
+        Text(text, modifier = Modifier.padding(8.dp))
     }
 }
 
 @Composable
 private fun Monde(monde: Jeu.Monde, modifier: Modifier = Modifier) {
-    Layout(modifier = modifier, content = {
+    Layout(modifier = modifier.background(color = Color(146,221,228)), content = {
         monde.obstacles.forEach { obstacle: Obstacle ->
             ObstacleImage(obstacle)
         }
