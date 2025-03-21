@@ -1,6 +1,7 @@
 package com.example.myapp.mario
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -21,17 +22,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.InspectableModifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.example.myapp.ui.theme.MyAppTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
 
 class MarioActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,10 +55,23 @@ class MarioActivity : ComponentActivity() {
 @Composable
 fun Interface(jeu: Jeu, modifier: Modifier = Modifier) {
     Column(modifier) {
-        Monde(jeu.monde, Modifier.fillMaxWidth().weight(1f))
+        Box(Modifier.fillMaxWidth().weight(1f)){
+            Monde(jeu.monde, Modifier.fillMaxSize())
+            Chrono(jeu.monde.duration, Modifier.align(Alignment.TopEnd).padding(8.dp))
+        }
         BarreDesBoutons(jeu)
     }
+}
 
+@Composable
+fun Chrono(duration: Long?, modifier: Modifier) {
+    val text = if (duration == null) "0:00:000" else {
+        val millis = duration % 1000
+        val second = (duration / 1000) % 60
+        val minutes = duration / 60000
+        "$minutes:${second.toString().padStart(2,'0')}:${millis.toString().padStart(3,'0')}"
+    }
+    Text(text = text, fontSize = 30.sp, modifier = modifier)
 }
 
 @Composable

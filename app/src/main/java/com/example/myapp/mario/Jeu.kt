@@ -8,6 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import kotlin.time.Duration
 
 private const val GRAVITY = 0.5f
 
@@ -62,7 +63,8 @@ class Jeu {
             //haut
             Obstacle(left = 300, bottom = 1900, width = 1000, height = 30),
         ),
-        val end: Obstacle = Obstacle(left = 800, bottom = 1950, width = 100, height = 100)
+        val end: Obstacle = Obstacle(left = 800, bottom = 1950, width = 100, height = 100),
+        val duration: Long? = null
     ) {
         companion object {
             const val RIGHT = 1080
@@ -71,6 +73,8 @@ class Jeu {
     }
 
     var monde by mutableStateOf(Monde())
+    var startTime: Long? = null
+    var stopTime: Boolean = false
     var isGoingLeft: Boolean = false
     var isGoingRight: Boolean = false
 
@@ -78,11 +82,24 @@ class Jeu {
         launch {
             while (isActive) {
                 moveMario()
+                stopTimeIfEnd()
+                updateDuration()
                 delay(20)
             }
         }
     }
 
+    fun updateDuration() {
+        if(!stopTime) {
+            monde = monde.copy(duration = startTime?.let { System.currentTimeMillis() - it })
+        }
+    }
+
+    fun stopTimeIfEnd() {
+        if(marioTouche(monde.mario, monde.end)) {
+            stopTime = true
+        }
+    }
 
     fun moveMario() {
         var mario = monde.mario
@@ -130,6 +147,7 @@ class Jeu {
 
     fun onLeftPressed() {
         isGoingLeft = true
+        if (startTime == null) startTime = System.currentTimeMillis()
     }
 
     fun onLeftReleased() {
@@ -138,6 +156,7 @@ class Jeu {
 
     fun onRightPressed() {
         isGoingRight = true
+        if (startTime == null) startTime = System.currentTimeMillis()
     }
 
     fun onRightReleased() {
@@ -145,6 +164,7 @@ class Jeu {
     }
 
     fun onJumpPressed() {
+        if (startTime == null) startTime = System.currentTimeMillis()
         var mario = monde.mario
         mario =
             mario.copy(bottom = mario.bottom - 1) // hack pour detecter qu'on est sur un obstacle
