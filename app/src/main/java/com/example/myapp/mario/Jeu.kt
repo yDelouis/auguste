@@ -8,7 +8,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-import kotlin.time.Duration
 
 private const val GRAVITY = 0.5f
 
@@ -20,7 +19,9 @@ class Jeu {
     data class Monde(
         val mario: Mario = Mario(),
         val obstacles: List<Obstacle> = listOf(
-            Obstacle(left = 0, bottom = -10, width = 100000, height = 10), // sol
+            Obstacle(left = 0, bottom = -10, width = RIGHT, height = 10), // sol
+            Obstacle(left = -10, bottom = 0, width = 10, height = TOP), // bord gauche
+            Obstacle(left = RIGHT, bottom = 0, width = 10, height = TOP), // bord droit
 
             Obstacle(left = 200, bottom = 0, width = 50, height = 110),
             Obstacle(left = 350, bottom = 70, width = 100, height = 30),
@@ -63,7 +64,7 @@ class Jeu {
             //haut
             Obstacle(left = 300, bottom = 1900, width = 1000, height = 30),
         ),
-        val end: Obstacle = Obstacle(left = 800, bottom = 1950, width = 100, height = 100),
+        val end: Obstacle = Obstacle(left = 800, bottom = 1950, width = 200, height = 200),
         val duration: Long? = null
     ) {
         companion object {
@@ -147,6 +148,7 @@ class Jeu {
 
     fun onLeftPressed() {
         isGoingLeft = true
+        monde = monde.copy(mario = monde.mario.copy(reverse = true))
         if (startTime == null) startTime = System.currentTimeMillis()
     }
 
@@ -156,6 +158,7 @@ class Jeu {
 
     fun onRightPressed() {
         isGoingRight = true
+        monde = monde.copy(mario = monde.mario.copy(reverse = false))
         if (startTime == null) startTime = System.currentTimeMillis()
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -26,11 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import com.example.myapp.R
 import com.example.myapp.ui.theme.MyAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -98,8 +102,8 @@ private fun Bouton(text: String, onPressed: () -> Unit, onReleased: () -> Unit) 
             }
         }
     }
-    Button(onClick = { }, interactionSource = interactionSource, modifier = Modifier.height(64.dp)) {
-        Text(text, modifier = Modifier.padding(8.dp))
+    Button(onClick = { }, interactionSource = interactionSource, modifier = Modifier.size(96.dp)) {
+        Text(text, fontSize = 36.sp, modifier = Modifier.padding(8.dp))
     }
 }
 
@@ -147,7 +151,7 @@ private fun Monde(monde: Jeu.Monde, modifier: Modifier = Modifier) {
 
 @Composable
 fun MarioImage(mario: Mario) {
-    Box(Modifier.fillMaxSize().background(Color.Red))
+    Image(painter = painterResource(if(mario.reverse) R.drawable.mario_reversed else R.drawable.mario), contentDescription = "Mario", modifier = Modifier.fillMaxSize())
 }
 
 @Composable
@@ -157,7 +161,7 @@ fun ObstacleImage(obstacle: Obstacle){
 
 @Composable
 fun End(end: Obstacle) {
-    Box(Modifier.fillMaxSize().background(Color.Yellow))
+    Image(painter = painterResource(R.drawable.etoile), contentDescription = "End", modifier = Modifier.fillMaxSize())
 }
 
 @Preview(showBackground = true)

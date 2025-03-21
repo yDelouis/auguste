@@ -14,6 +14,7 @@
         tools:targetApi="31">
         <activity
             android:name=".mario.MarioActivity"
+            android:icon="@drawable/mario"
             android:exported="true"
             android:label="@string/title_activity_mario"
             android:theme="@style/Theme.MyApp">
@@ -24,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".CPlusCMoinsActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.MyApp"
