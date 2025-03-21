@@ -1,8 +1,16 @@
 package com.example.myapp.mario
 
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.unit.IntRect
+
 data class Obstacle(
-    val x: Int,
-    val y: Int,
-    val largeur: Int,
-    val hauteur: Int
-)
+    val left: Int,
+    val bottom: Int,
+    val width: Int,
+    val height: Int
+) {
+    val right = left + width
+    val top = bottom + height
+
+    fun rect() = IntRect(left, bottom, right, top)
+}

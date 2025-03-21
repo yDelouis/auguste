@@ -1,6 +1,5 @@
 package com.example.myapp.mario
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,38 +12,38 @@ import kotlin.math.roundToInt
 private const val GRAVITY = 0.5f
 
 private const val VITESSE_SAUT = 13f
-private const val VITESSE_HORIZONTALE = 1
+private const val VITESSE_HORIZONTALE = 3
 
 class Jeu {
 
     data class Monde(
         val mario: Mario = Mario(),
         val obstacles: List<Obstacle> = listOf(
-            Obstacle(x = 200, y = 0, largeur = 50, hauteur = 110),
-            Obstacle(x = 350, y = 70, largeur = 100, hauteur = 30),
-            Obstacle(x = 500, y = 130, largeur = 100, hauteur = 30),
-            Obstacle(x = 650, y = 200, largeur = 100, hauteur = 30),
-            Obstacle(x = 800, y = 280, largeur = 100, hauteur = 30),
-            Obstacle(x = 590, y = 370, largeur = 100, hauteur = 30),
-            Obstacle(x = 830, y = 480, largeur = 200, hauteur = 30),
-            Obstacle(x = 1040, y = 590, largeur = 50, hauteur = 30),
-            Obstacle(x = 800, y = 690, largeur = 100, hauteur = 30),
-            Obstacle(x = 620, y = 750, largeur = 20, hauteur = 30),
-            Obstacle(x = 500, y = 850, largeur = 40, hauteur = 30),
-            Obstacle(x = 300, y = 950, largeur = 100, hauteur = 30),
-            Obstacle(x = 490, y = 1050, largeur = 100, hauteur = 30),
-            Obstacle(x = 590, y = 1150, largeur = 100, hauteur = 30),
+            Obstacle(left = 200, bottom = 0, width = 50, height = 110),
+            Obstacle(left = 350, bottom = 70, width = 100, height = 30),
+            Obstacle(left = 500, bottom = 130, width = 100, height = 30),
+            Obstacle(left = 650, bottom = 200, width = 100, height = 30),
+            Obstacle(left = 800, bottom = 280, width = 100, height = 30),
+            Obstacle(left = 590, bottom = 370, width = 100, height = 30),
+            Obstacle(left = 830, bottom = 480, width = 200, height = 30),
+            Obstacle(left = 1040, bottom = 590, width = 50, height = 30),
+            Obstacle(left = 800, bottom = 690, width = 100, height = 30),
+            Obstacle(left = 620, bottom = 750, width = 20, height = 30),
+            Obstacle(left = 500, bottom = 850, width = 40, height = 30),
+            Obstacle(left = 300, bottom = 950, width = 100, height = 30),
+            Obstacle(left = 490, bottom = 1050, width = 100, height = 30),
+            Obstacle(left = 590, bottom = 1150, width = 100, height = 30),
 
             //Partie a gauche
-            Obstacle(x = 100, y = 200, largeur = 20, hauteur = 30),
-            Obstacle(x = 250, y = 300, largeur = 20, hauteur = 30),
-            Obstacle(x = 100, y = 400, largeur = 20, hauteur = 30),
-            Obstacle(x = 250, y = 500, largeur = 20, hauteur = 30),
+            Obstacle(left = 100, bottom = 200, width = 20, height = 30),
+            Obstacle(left = 250, bottom = 300, width = 20, height = 30),
+            Obstacle(left = 100, bottom = 400, width = 20, height = 30),
+            Obstacle(left = 250, bottom = 500, width = 20, height = 30),
 
-            Obstacle(x = 100, y = 600, largeur = 20, hauteur = 30),
-            Obstacle(x = 250, y = 700, largeur = 20, hauteur = 30),
-            Obstacle(x = 100, y = 800, largeur = 20, hauteur = 30),
-            Obstacle(x = 210, y = 900, largeur = 20, hauteur = 30),
+            Obstacle(left = 100, bottom = 600, width = 20, height = 30),
+            Obstacle(left = 250, bottom = 700, width = 20, height = 30),
+            Obstacle(left = 100, bottom = 800, width = 20, height = 30),
+            Obstacle(left = 210, bottom = 900, width = 20, height = 30),
 
             )
     )
@@ -65,21 +64,51 @@ class Jeu {
 
     fun moveMario() {
         var mario = monde.mario
-        if (isGoingLeft) {
-            mario = mario.copy(x = mario.x - VITESSE_HORIZONTALE)
-        } else if (isGoingRight) {
-            mario = mario.copy(x = mario.x + VITESSE_HORIZONTALE)
-        }
+        mario = moveHorizontal(mario)
+        mario = moveVertical(mario)
 
-        mario = mario.copy(y = (mario.y + mario.vy).roundToInt().coerceAtLeast(0))
-        if (mario.y > 0) { // Si mario est en l'air
-            mario = mario.copy(vy = mario.vy - GRAVITY)
-        } else { // sinon, mario est au sol
-            mario = mario.copy(vy = 0f)
-        }
         monde = monde.copy(mario = mario)
     }
 
+    private fun moveHorizontal(mario: Mario): Mario {
+        var newMario = mario
+        if (isGoingLeft) {
+            newMario = newMario.copy(left = newMario.left - VITESSE_HORIZONTALE)
+        } else if (isGoingRight) {
+            newMario = newMario.copy(left = newMario.left + VITESSE_HORIZONTALE)
+        }
+        if (marioTouche(newMario, monde.obstacles)) {
+            newMario = mario
+        }
+        return newMario
+    }
+
+    private fun moveVertical(mario: Mario): Mario {
+        var newMario = mario
+        newMario = newMario.copy(bottom = (newMario.bottom + newMario.vy).roundToInt().coerceAtLeast(0))
+        if (marioTouche(newMario, monde.obstacles)) {
+            newMario = newMario.copy(vy = 0f, bottom = mario.bottom)
+        }
+        if (newMario.bottom > 0) { // Si mario est en l'air
+            newMario = newMario.copy(vy = newMario.vy - GRAVITY)
+        } else { // sinon, mario est au sol
+            newMario = newMario.copy(vy = 0f)
+        }
+        return newMario
+    }
+
+    fun marioTouche(mario: Mario, obstacles: List<Obstacle>): Boolean{
+        for(obstacle in obstacles){
+            if (marioTouche(mario, obstacle)){
+                return true
+            }
+        }
+        return false
+    }
+
+    fun marioTouche(mario: Mario, obstacle: Obstacle):Boolean{
+       return mario.rect().overlaps(obstacle.rect())
+    }
 
     fun onLeftPressed() {
         isGoingLeft = true
