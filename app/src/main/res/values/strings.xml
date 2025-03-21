@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">"Auguste's app"</string>
     <string name="title_activity_main">"C'est plus c'est moins"</string>
+    <string name="title_activity_mario">MarioActivity</string>
 </resources>
