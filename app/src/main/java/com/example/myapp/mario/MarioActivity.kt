@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.InspectableModifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
@@ -91,21 +92,23 @@ private fun Monde(monde: Jeu.Monde, modifier: Modifier = Modifier) {
         monde.obstacles.forEach { obstacle: Obstacle ->
             ObstacleImage(obstacle)
         }
+        End(monde.end)
         MarioImage(monde.mario)
     }) { measurables, constraints ->
         fun Int.toXPx() = this * constraints.maxWidth / Jeu.Monde.RIGHT
         fun Int.toYPx() = this * constraints.maxHeight / Jeu.Monde.TOP
 
-        var obstacleMesurables = measurables.dropLast(1)
+        var obstacleMesurables = measurables.dropLast(2)
+        var endMeasurable = measurables.get(measurables.size-2)
         var marioMesurable = measurables.last()
         val obstaclePlaceables = obstacleMesurables.mapIndexed { index, measurable ->
             val obstacle = monde.obstacles.get(index)
             measurable.measure(Constraints.fixed(obstacle.width.toXPx(), obstacle.height.toYPx()))
         }
+        val endPlaceable = endMeasurable.measure(Constraints.fixed(monde.end.width.toXPx(), monde.end.width.toYPx()))
         val marioPlaceable = marioMesurable.measure(Constraints.fixed(Mario.WIDTH.toXPx(), Mario.HEIGHT.toYPx()))
 
         layout(constraints.maxWidth, constraints.maxHeight) {
-
             obstaclePlaceables.mapIndexed { index, placeable ->
                 val obstacle = monde.obstacles.get(index)
                 placeable.placeRelative(
@@ -113,6 +116,10 @@ private fun Monde(monde: Jeu.Monde, modifier: Modifier = Modifier) {
                     y = constraints.maxHeight - obstacle.bottom.toYPx() - placeable.height
                 )
             }
+            endPlaceable.placeRelative(
+                monde.end.left.toXPx(),
+                constraints.maxHeight - monde.end.bottom.toYPx() - endPlaceable.height
+            )
             marioPlaceable.placeRelative(
                 monde.mario.left.toXPx(),
                 constraints.maxHeight - monde.mario.bottom.toYPx() - marioPlaceable.height
@@ -129,6 +136,11 @@ fun MarioImage(mario: Mario) {
 @Composable
 fun ObstacleImage(obstacle: Obstacle){
     Box(Modifier.fillMaxSize().background(Color.Gray))
+}
+
+@Composable
+fun End(end: Obstacle) {
+    Box(Modifier.fillMaxSize().background(Color.Yellow))
 }
 
 @Preview(showBackground = true)

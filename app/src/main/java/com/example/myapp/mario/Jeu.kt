@@ -35,7 +35,7 @@ class Jeu {
             Obstacle(left = 300, bottom = 950, width = 100, height = 30),
             Obstacle(left = 490, bottom = 1100, width = 100, height = 30),
             Obstacle(left = 590, bottom = 1230, width = 100, height = 30),
-            Obstacle(left = 690, bottom = 1340, width = 100 , height = 30),
+            Obstacle(left = 690, bottom = 1340, width = 100, height = 30),
             Obstacle(left = 550, bottom = 1400, width = 70, height = 30),
             Obstacle(left = 450, bottom = 1470, width = 10, height = 30),
             Obstacle(left = 250, bottom = 1520, width = 5, height = 30),
@@ -60,8 +60,9 @@ class Jeu {
             Obstacle(left = 100, bottom = 1850, width = 5, height = 5),
 
             //haut
-            Obstacle(left = 300 , bottom = 1900 , width = 1000 , height = 30),
-            )
+            Obstacle(left = 300, bottom = 1900, width = 1000, height = 30),
+        ),
+        val end: Obstacle = Obstacle(left = 800, bottom = 1950, width = 100, height = 100)
     ) {
         companion object {
             const val RIGHT = 1080
@@ -114,17 +115,17 @@ class Jeu {
         return newMario
     }
 
-    fun marioTouche(mario: Mario, obstacles: List<Obstacle>): Boolean{
-        for(obstacle in obstacles){
-            if (marioTouche(mario, obstacle)){
+    fun marioTouche(mario: Mario, obstacles: List<Obstacle>): Boolean {
+        for (obstacle in obstacles) {
+            if (marioTouche(mario, obstacle)) {
                 return true
             }
         }
         return false
     }
 
-    fun marioTouche(mario: Mario, obstacle: Obstacle):Boolean{
-       return mario.rect().overlaps(obstacle.rect())
+    fun marioTouche(mario: Mario, obstacle: Obstacle): Boolean {
+        return mario.rect().overlaps(obstacle.rect())
     }
 
     fun onLeftPressed() {
@@ -145,8 +146,9 @@ class Jeu {
 
     fun onJumpPressed() {
         var mario = monde.mario
-        mario = mario.copy(bottom = mario.bottom - 1) // hack pour detecter qu'on est sur un obstacle
-        if(marioTouche(mario, monde.obstacles)) {
+        mario =
+            mario.copy(bottom = mario.bottom - 1) // hack pour detecter qu'on est sur un obstacle
+        if (marioTouche(mario, monde.obstacles)) {
             monde = monde.copy(mario = monde.mario.copy(vy = VITESSE_SAUT))
         }
     }
