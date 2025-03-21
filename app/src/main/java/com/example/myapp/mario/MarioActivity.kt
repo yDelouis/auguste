@@ -93,25 +93,29 @@ private fun Monde(monde: Jeu.Monde, modifier: Modifier = Modifier) {
         }
         MarioImage(monde.mario)
     }) { measurables, constraints ->
+        fun Int.toXPx() = this * constraints.maxWidth / Jeu.Monde.RIGHT
+        fun Int.toYPx() = this * constraints.maxHeight / Jeu.Monde.TOP
+
         var obstacleMesurables = measurables.dropLast(1)
         var marioMesurable = measurables.last()
         val obstaclePlaceables = obstacleMesurables.mapIndexed { index, measurable ->
             val obstacle = monde.obstacles.get(index)
-            measurable.measure(Constraints.fixed(obstacle.width, obstacle.height))
+            measurable.measure(Constraints.fixed(obstacle.width.toXPx(), obstacle.height.toYPx()))
         }
-        val marioPlaceable = marioMesurable.measure(Constraints.fixed(Mario.WIDTH, Mario.HEIGHT))
+        val marioPlaceable = marioMesurable.measure(Constraints.fixed(Mario.WIDTH.toXPx(), Mario.HEIGHT.toYPx()))
 
         layout(constraints.maxWidth, constraints.maxHeight) {
+
             obstaclePlaceables.mapIndexed { index, placeable ->
                 val obstacle = monde.obstacles.get(index)
                 placeable.placeRelative(
-                    x = obstacle.left,
-                    y = constraints.maxHeight - obstacle.bottom - placeable.height
+                    x = obstacle.left.toXPx(),
+                    y = constraints.maxHeight - obstacle.bottom.toYPx() - placeable.height
                 )
             }
             marioPlaceable.placeRelative(
-                monde.mario.left,
-                constraints.maxHeight - monde.mario.bottom - marioPlaceable.height
+                monde.mario.left.toXPx(),
+                constraints.maxHeight - monde.mario.bottom.toYPx() - marioPlaceable.height
             )
         }
     }

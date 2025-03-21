@@ -59,13 +59,15 @@ class Jeu {
             Obstacle(left = 250, bottom = 1750, width = 5, height = 5),
             Obstacle(left = 100, bottom = 1850, width = 5, height = 5),
 
-
-
             //haut
             Obstacle(left = 300 , bottom = 1900 , width = 1000 , height = 30),
-
             )
-    )
+    ) {
+        companion object {
+            const val RIGHT = 1080
+            const val TOP = 2200
+        }
+    }
 
     var monde by mutableStateOf(Monde())
     var isGoingLeft: Boolean = false
